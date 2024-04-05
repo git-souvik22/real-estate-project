@@ -22,7 +22,7 @@ export default function Header() {
         <ul className="flex gap-4">
           <Link to="/">
             <li className="hidden sm:inline text-slate-700">
-              <div className="hover:underline flex flex-col items-center hover:text-slate-400">
+              <div className="hover:underline flex flex-col items-center">
                 <FaHome />
                 Home
               </div>
@@ -30,7 +30,7 @@ export default function Header() {
           </Link>
           <Link to="/about">
             <li className="hidden sm:inline text-slate-700">
-              <div className="hover:underline flex flex-col items-center hover:text-slate-400">
+              <div className="hover:underline flex flex-col items-center">
                 <FaReadme />
                 About
               </div>
@@ -38,7 +38,7 @@ export default function Header() {
           </Link>
           <Link to="/sign-in">
             <li className="text-slate-700">
-              <div className="hover:underline flex flex-col items-center hover:text-slate-400">
+              <div className="hover:underline flex flex-col items-center">
                 <FaSignInAlt />
                 Sign In
               </div>
