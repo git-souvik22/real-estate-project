@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 import dotenv from "dotenv";
 dotenv.config({ path: path.resolve(__dirname, ".env") });
+// routes imported
+import userRouter from "./routes/user.route.js";
+
+// middleware
+app.use("/api/user", userRouter);
 
 mongoose
   .connect(process.env.DB_URL)
