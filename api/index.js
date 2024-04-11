@@ -12,6 +12,8 @@ import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 
 // middleware
+app.use(express.json());
+// app.use(express.urlencoded({ extended: false }));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
