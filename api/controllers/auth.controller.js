@@ -34,6 +34,14 @@ export const SignUp = async (req, res) => {
           .status(400)
           .json({ errMessage: "this username is already taken" });
       }
+      if (
+        errorRes.includes("E11000 duplicate key error") &&
+        errorRes.includes("email")
+      ) {
+        return res
+          .status(400)
+          .json({ errMessage: "this email is already registered" });
+      }
     }
     res.status(500).send("Server Error");
   }
