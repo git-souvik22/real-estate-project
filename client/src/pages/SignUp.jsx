@@ -11,6 +11,7 @@ export default function SignUp() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
@@ -19,9 +20,13 @@ export default function SignUp() {
       body: JSON.stringify(formData),
     });
     const data = await res.json();
-    const { success, message } = data;
+    const { success } = data;
     if (success === true) {
-      alert(message);
+      alert(data.message);
+      window.location.reload();
+    }
+    if (success === false) {
+      alert(data.errMessage);
       window.location.reload();
     }
   };

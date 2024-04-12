@@ -22,7 +22,7 @@ export const SignUp = async (req, res) => {
   } catch (err) {
     if (err.name === "ValidationError") {
       const errors = Object.values(err.errors).map((error) => error.message);
-      return res.status(400).json({ errors });
+      return res.status(400).json({ success: false, errMessage: errors });
     }
     if (err.name === "MongoServerError") {
       const errorRes = err.errorResponse.errmsg;
@@ -30,17 +30,19 @@ export const SignUp = async (req, res) => {
         errorRes.includes("E11000 duplicate key error") &&
         errorRes.includes("username")
       ) {
-        return res
-          .status(400)
-          .json({ errMessage: "this username is already taken" });
+        return res.status(400).json({
+          success: false,
+          errMessage: "this username is already taken",
+        });
       }
       if (
         errorRes.includes("E11000 duplicate key error") &&
         errorRes.includes("email")
       ) {
-        return res
-          .status(400)
-          .json({ errMessage: "this email is already registered" });
+        return res.status(400).json({
+          success: false,
+          errMessage: "this email is already registered",
+        });
       }
     }
     res.status(500).send("Server Error");
