@@ -25,6 +25,7 @@ export default function SignUp() {
     const data = await res.json();
     const { success } = data;
     if (success === true) {
+      setError(null);
       setTimeout(() => {
         setLoading(false);
         alert(data.message);
@@ -65,7 +66,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
         <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-70">
-          {loading ? "Signing Up..." : "Sign Up"}
+          {loading && error === null ? "Signing Up..." : "Sign Up"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
