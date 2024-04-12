@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -11,7 +13,7 @@ export default function SignUp() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true);
     const res = await fetch("/api/auth/signup", {
       method: "POST",
       headers: {
@@ -22,12 +24,14 @@ export default function SignUp() {
     const data = await res.json();
     const { success } = data;
     if (success === true) {
-      alert(data.message);
-      window.location.reload();
+      setTimeout(() => {
+        setLoading(false);
+        alert(data.message);
+        window.location.assign(`${window.location.origin}/sign-in`);
+      }, 1000);
     }
     if (success === false) {
-      alert(data.errMessage);
-      window.location.reload();
+      setError(data.errMessage);
     }
   };
 
@@ -36,6 +40,7 @@ export default function SignUp() {
       <h1 className="text-3xl text-center font-semibold my-7">Sign-Up</h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4 ">
         <input
+          required
           type="text"
           placeholder="username"
           className="border p-3 rounded-lg"
@@ -43,6 +48,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
         <input
+          required
           type="email"
           placeholder="email"
           className="border p-3 rounded-lg"
@@ -50,6 +56,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
         <input
+          required
           type="password"
           placeholder="password"
           className="border p-3 rounded-lg"
@@ -57,7 +64,7 @@ export default function SignUp() {
           onChange={handleChange}
         />
         <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-70">
-          Sign Up
+          {loading ? "Signing Up..." : "Sign Up"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
@@ -66,6 +73,7 @@ export default function SignUp() {
           Sign In
         </Link>
       </div>
+      {error && <p className="text-red-500 mt-5">{error}</p>}
     </div>
   );
 }
