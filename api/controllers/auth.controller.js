@@ -65,12 +65,17 @@ export const SignIn = async (req, res) => {
     const genToken = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, {
       expiresIn: "5d",
     });
+    const { password: pass, ...rest } = checkUser._doc;
+
     if (checkUser && validPassword) {
-      res.status(200).json({
-        success: true,
-        user: checkUser,
-        token: genToken,
-      });
+      res
+        .cookie("access_token", genToken, { httpOnly: true })
+        .status(200)
+        .json({
+          success: true,
+          user: rest,
+          token: genToken,
+        });
     } else {
       res.status(404).json({
         success: false,
