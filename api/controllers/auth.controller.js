@@ -1,6 +1,13 @@
 import { ValidatePass } from "../Utils/validatePassword.js";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { fileURLToPath } from "url";
+import path, { dirname } from "path";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+import dotenv from "dotenv";
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 export const SignUp = async (req, res) => {
   try {
@@ -55,13 +62,22 @@ export const SignIn = async (req, res) => {
     const { email, password } = req.body;
     const checkUser = await User.findOne({ email });
     const validPassword = ValidatePass(password, checkUser.password);
+    const genToken = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "5d",
+    });
     if (checkUser && validPassword) {
       res.status(200).json({
         success: true,
         user: checkUser,
+        token: genToken,
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        message: "Invalid Credentials",
       });
     }
-    if (!checkUser || !validPassword) {
+    if (!validPassword) {
       res.status(404).json({
         success: false,
         message: "Invalid Credentials",
