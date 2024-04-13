@@ -1,3 +1,4 @@
+import { ValidatePass } from "../Utils/validatePassword.js";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 
@@ -46,5 +47,30 @@ export const SignUp = async (req, res) => {
       }
     }
     res.status(500).send("Server Error");
+  }
+};
+
+export const SignIn = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const checkUser = await User.findOne({ email });
+    const validPassword = ValidatePass(password, checkUser.password);
+    if (checkUser && validPassword) {
+      res.status(200).json({
+        success: true,
+        user: checkUser,
+      });
+    }
+    if (!checkUser || !validPassword) {
+      res.status(404).json({
+        success: false,
+        message: "Invalid Credentials",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
   }
 };
