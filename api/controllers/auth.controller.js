@@ -76,13 +76,8 @@ export const SignIn = async (req, res) => {
           user: rest,
           token: genToken,
         });
-    } else {
-      res.status(404).json({
-        success: false,
-        message: "Invalid Credentials",
-      });
     }
-    if (!validPassword) {
+    if (!checkUser || !validPassword) {
       res.status(404).json({
         success: false,
         message: "Invalid Credentials",
