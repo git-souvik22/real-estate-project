@@ -33,7 +33,7 @@ export default function SignIn() {
       }, 1000);
     }
     if (success === false) {
-      setError(data.errMessage);
+      setError(data.message);
     }
   };
 

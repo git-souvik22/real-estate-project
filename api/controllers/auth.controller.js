@@ -73,8 +73,8 @@ export const SignIn = async (req, res) => {
         .status(200)
         .json({
           success: true,
+          message: "LogIn Successful",
           user: rest,
-          token: genToken,
         });
     }
     if (!checkUser || !validPassword) {
