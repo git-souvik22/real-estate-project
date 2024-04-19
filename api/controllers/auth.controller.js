@@ -90,3 +90,56 @@ export const SignIn = async (req, res) => {
     });
   }
 };
+
+export const Google = async (req, res) => {
+  try {
+    const { name, email, photo } = req.body;
+    const checkUser = await User.findOne({ email });
+    if (checkUser) {
+      const genToken = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "5d",
+      });
+      const { password: pass, ...rest } = checkUser._doc;
+      res
+        .cookie("access_token", genToken, { httpOnly: true })
+        .status(200)
+        .json({
+          success: true,
+          message: "LogIn Successful",
+          user: rest,
+        });
+    } else {
+      const genPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+      const hashedPassword = bcryptjs.hashSync(genPassword, 10);
+      const newUser = new User({
+        username:
+          name.split(" ").join("").toLowerCase() +
+          Math.random().toString(36).slice(-4),
+        email: email,
+        password: hashedPassword,
+        avator: photo,
+      });
+
+      await newUser.save();
+      const newToken = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+        expiresIn: "5d",
+      });
+      const { password: pass, ...rest } = newUser._doc;
+      res
+        .cookie("access_token", newToken, { httpOnly: true })
+        .status(200)
+        .json({
+          success: true,
+          message: "Registration Successful",
+          user: rest,
+        });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};
