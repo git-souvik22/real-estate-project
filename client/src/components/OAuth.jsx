@@ -34,6 +34,7 @@ export const OAuth = () => {
   return (
     <button
       onClick={handleGoogleClick}
+      type="button"
       className="text-white bg-red-700 p-3 rounded-lg uppercase hover:opacity-90"
     >
       Signin By Google
