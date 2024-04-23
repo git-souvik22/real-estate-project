@@ -58,9 +58,22 @@ export default function Profile() {
         <img
           onClick={() => fileRef.current.click()}
           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
-          src={currentUser.user.avator}
+          src={formData.avator || currentUser.user.avator}
           alt="profile image"
         />
+        <p className="text-sm self-center">
+          {uploadError ? (
+            <span className="text-red-700">
+              There was an Error uploading Image!
+            </span>
+          ) : !uploadError && uploadPerc > 0 && uploadPerc < 100 ? (
+            <span className="text-slate-600">{`Uploading ${uploadPerc}%`}</span>
+          ) : uploadPerc === 100 ? (
+            <span className="text-green-700">Image Uploaded Successfully!</span>
+          ) : (
+            ""
+          )}
+        </p>
         <input
           type="text"
           name="username"
