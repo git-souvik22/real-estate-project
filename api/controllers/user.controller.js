@@ -1,10 +1,3 @@
-export const test = (req, res) => {
-  res.json({
-    message: "Hello World!",
-  });
-};
+import bcryptjs from "bcryptjs";
 
-export const UpdateUser = async (req, res) => {
-  try {
-  } catch (error) {}
-};
+export const UpdateUser = (req, res) => {};
