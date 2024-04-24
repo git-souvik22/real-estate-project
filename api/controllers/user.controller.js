@@ -3,3 +3,8 @@ export const test = (req, res) => {
     message: "Hello World!",
   });
 };
+
+export const UpdateUser = async (req, res) => {
+  try {
+  } catch (error) {}
+};
