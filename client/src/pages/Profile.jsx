@@ -76,6 +76,7 @@ export default function Profile() {
         <input
           type="text"
           name="username"
+          defaultValue={currentUser.user.username}
           placeholder="username"
           id="username"
           className="border p-3 rounded-lg"
@@ -83,6 +84,7 @@ export default function Profile() {
         <input
           type="email"
           name="email"
+          defaultValue={currentUser.user.email}
           placeholder="email"
           id="email"
           className="border p-3 rounded-lg"
