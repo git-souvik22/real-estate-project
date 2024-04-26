@@ -11,7 +11,7 @@ export const authUser = (req, res, next) => {
   if (!token)
     return res.json({
       success: false,
-      message: "Unauthorized User!",
+      message: "Invalid Token!",
     });
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {

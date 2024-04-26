@@ -7,6 +7,12 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
+import {
+  updateUserStart,
+  updateUserSuccess,
+  updateUserFailure,
+} from "../redux/user/userSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function Profile() {
   const { currentUser } = useSelector((state) => state.user);
@@ -15,6 +21,8 @@ export default function Profile() {
   const [uploadPerc, setUploadPerc] = useState(0);
   const [uploadError, setUploadError] = useState(false);
   const [formData, setFormData] = useState({});
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (file) {
@@ -43,10 +51,37 @@ export default function Profile() {
       }
     );
   };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/api/user/update/${currentUser.user._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+    }
+  };
+
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form className="flex flex-col gap-4">
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
           type="file"
@@ -77,6 +112,7 @@ export default function Profile() {
           type="text"
           name="username"
           defaultValue={currentUser.user.username}
+          onChange={handleChange}
           placeholder="username"
           id="username"
           className="border p-3 rounded-lg"
@@ -85,6 +121,7 @@ export default function Profile() {
           type="email"
           name="email"
           defaultValue={currentUser.user.email}
+          onChange={handleChange}
           placeholder="email"
           id="email"
           className="border p-3 rounded-lg"
@@ -92,6 +129,7 @@ export default function Profile() {
         <input
           type="password"
           name="password"
+          onChange={handleChange}
           placeholder="password"
           id="password"
           className="border p-3 rounded-lg"
