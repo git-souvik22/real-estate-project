@@ -39,7 +39,7 @@ export default function Header() {
               </div>
             </li>
           </Link>
-          {currentUser ? (
+          {currentUser.user ? (
             <Link to="/profile">
               <img
                 className="rounded-full h-10 w-10 object-cover shadow-blue-600 shadow-md"

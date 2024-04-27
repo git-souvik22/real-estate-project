@@ -45,7 +45,7 @@ export const DeleteUser = async (req, res) => {
   try {
     const deleteUser = await User.findByIdAndDelete(req.params.id);
     if (deleteUser) {
-      res.status(401).json({
+      res.status(202).json({
         success: true,
         message: "Account Deletion Complete!",
       });
