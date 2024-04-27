@@ -3,7 +3,7 @@ import User from "../models/user.model.js";
 
 export const UpdateUser = async (req, res) => {
   if (req.user.id !== req.params.id)
-    return res.json({
+    return res.status(500).json({
       success: false,
       message: "Unauthorized Access!",
     });
@@ -23,15 +23,35 @@ export const UpdateUser = async (req, res) => {
       },
       { new: true }
     );
-
     const { password, ...rest } = updatedUser._doc;
-
     res.status(200).json({
       success: true,
       user: rest,
     });
   } catch (error) {
-    res.json({
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
+
+export const DeleteUser = async (req, res) => {
+  if (req.user.id !== req.params.id)
+    return res.status(500).json({
+      success: false,
+      message: "Cannot Delete Account",
+    });
+  try {
+    const deleteUser = await User.findByIdAndDelete(req.params.id);
+    if (deleteUser) {
+      res.status(401).json({
+        success: true,
+        message: "Account Deletion Complete!",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
       success: false,
       message: error,
     });

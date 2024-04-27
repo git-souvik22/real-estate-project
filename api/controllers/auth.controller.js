@@ -61,26 +61,37 @@ export const SignIn = async (req, res) => {
   try {
     const { email, password } = req.body;
     const checkUser = await User.findOne({ email });
-    const validPassword = ValidatePass(password, checkUser.password);
-    const genToken = jwt.sign({ id: checkUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "5d",
-    });
-    const { password: pass, ...rest } = checkUser._doc;
-
-    if (checkUser && validPassword) {
-      res
-        .cookie("access_token", genToken, { httpOnly: true })
-        .status(200)
-        .json({
-          success: true,
-          message: "LogIn Successful",
-          user: rest,
+    if (checkUser) {
+      const validPassword = ValidatePass(password, checkUser.password);
+      if (validPassword) {
+        const genToken = jwt.sign(
+          { id: checkUser._id },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "5d",
+          }
+        );
+        const { password: pass, ...rest } = checkUser._doc;
+        res
+          .cookie("access_token", genToken, { httpOnly: true })
+          .status(200)
+          .json({
+            success: true,
+            message: "LogIn Successful",
+            user: rest,
+          });
+      }
+      if (!validPassword) {
+        res.status(404).json({
+          success: false,
+          message: "Invalid Credentials",
         });
+      }
     }
-    if (!checkUser || !validPassword) {
+    if (!checkUser) {
       res.status(404).json({
         success: false,
-        message: "Invalid Credentials",
+        message: "User Not Found",
       });
     }
   } catch (error) {
