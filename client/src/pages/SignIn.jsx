@@ -63,7 +63,7 @@ export default function SignIn() {
           id="password"
           onChange={handleChange}
         />
-        <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-70">
+        <button className="bg-blue-700 text-white p-3 rounded-lg uppercase hover:opacity-90 disabled:opacity-70">
           {loading && error === null ? "Signing In..." : "Sign In"}
         </button>
         <OAuth />

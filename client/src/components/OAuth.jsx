@@ -1,3 +1,4 @@
+import GoogleButton from "react-google-button";
 import { GoogleAuthProvider, getAuth, signInWithPopup } from "firebase/auth";
 import { app } from "../firebase.js";
 import { useDispatch } from "react-redux";
@@ -35,12 +36,10 @@ export const OAuth = () => {
     }
   };
   return (
-    <button
+    <GoogleButton
+      title="Continue with Google"
+      style={{ width: "100%", marginTop: "5px" }}
       onClick={handleGoogleClick}
-      type="button"
-      className="text-white bg-red-700 p-3 rounded-lg uppercase hover:opacity-90"
-    >
-      Signin By Google
-    </button>
+    />
   );
 };
