@@ -154,3 +154,18 @@ export const Google = async (req, res) => {
     });
   }
 };
+
+export const SignOut = async (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    res.status(200).json({
+      success: true,
+      message: "User is Sign Out",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
