@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 // routes imported
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
+import listingRouter from "./routes/listing.route.js";
 
 // middleware
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use(cookieParser());
 // app.use(express.urlencoded({ extended: false }));
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/listing", listingRouter);
 
 mongoose
   .connect(process.env.DB_URL)
