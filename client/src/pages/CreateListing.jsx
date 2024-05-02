@@ -12,6 +12,7 @@ export default function CreateListing() {
   const [formData, setFormData] = useState({
     imageUrls: [],
   });
+  console.log(formData);
   const [imageUploadError, setImageUploadError] = useState(false);
 
   const handleImageSubmit = () => {
@@ -60,6 +61,13 @@ export default function CreateListing() {
           });
         }
       );
+    });
+  };
+
+  const handleImageRemove = (index) => {
+    setFormData({
+      ...formData,
+      imageUrls: formData.imageUrls.filter((_, i) => i !== index),
     });
   };
 
@@ -208,7 +216,11 @@ export default function CreateListing() {
                   alt="listing image"
                   className="w-20 h-20 object-contain rounded-lg"
                 />
-                <button className="text-red-700 p-2 rounded-lg hover:opacity-75 uppercase">
+                <button
+                  type="button"
+                  onClick={() => handleImageRemove(index)}
+                  className="text-red-700 p-2 rounded-lg hover:opacity-75 uppercase"
+                >
                   Delete
                 </button>
               </div>
