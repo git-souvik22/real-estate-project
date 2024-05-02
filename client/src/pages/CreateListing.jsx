@@ -197,6 +197,22 @@ export default function CreateListing() {
             </button>
           </div>
           <p className="text-red-700">{imageUploadError && imageUploadError}</p>
+          {formData.imageUrls.length > 0 &&
+            formData.imageUrls.map((url, index) => (
+              <div
+                key={index + 1}
+                className="flex justify-between p-3 border border-slate-200 items-center"
+              >
+                <img
+                  src={url}
+                  alt="listing image"
+                  className="w-20 h-20 object-contain rounded-lg"
+                />
+                <button className="text-red-700 p-2 rounded-lg hover:opacity-75 uppercase">
+                  Delete
+                </button>
+              </div>
+            ))}
           <button className="p-3 bg-slate-700 text-white uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
             Create Listing
           </button>
