@@ -6,6 +6,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { app } from "../firebase.js";
+import { useSelector } from "react-redux";
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
@@ -28,6 +29,7 @@ export default function CreateListing() {
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { currentUser } = useSelector((state) => state.user);
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -132,7 +134,10 @@ export default function CreateListing() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          userRef: currentUser.user._id,
+        }),
       });
 
       const data = await res.json();
@@ -141,6 +146,7 @@ export default function CreateListing() {
         return;
       }
       if (data.success === false) {
+        setLoading(false);
         setError(data.message);
       }
     } catch (error) {
