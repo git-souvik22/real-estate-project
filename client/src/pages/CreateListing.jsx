@@ -127,6 +127,8 @@ export default function CreateListing() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      if (formData.imageUrls.length < 1)
+        return setError("Atleast upload one image !");
       setLoading(true);
       setError(false);
       const res = await fetch(`/api/listing/create`, {
