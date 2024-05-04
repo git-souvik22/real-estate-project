@@ -13,6 +13,7 @@ import {
   signOutFailure,
   signOutSuccess,
 } from "../redux/user/userSlice.js";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
@@ -25,7 +26,7 @@ export default function CreateListing() {
     bedRoom: 1,
     bathRoom: 1,
     regularPrice: 50,
-    discountPrice: 50,
+    discountPrice: 0,
     offer: false,
     parking: false,
     furnished: false,
@@ -37,6 +38,7 @@ export default function CreateListing() {
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -153,6 +155,7 @@ export default function CreateListing() {
 
       const data = await res.json();
       if (data.success === true) {
+        navigate(`/listing/${data.listing._id}`);
         setLoading(false);
         return;
       }
@@ -330,7 +333,7 @@ export default function CreateListing() {
               <div className="flex items-center gap-2">
                 <input
                   className="rounded-lg p-3 border border-gray-300"
-                  min={50}
+                  min={0}
                   max={1000000}
                   required
                   type="number"
@@ -393,7 +396,10 @@ export default function CreateListing() {
                 </button>
               </div>
             ))}
-          <button className="p-3 bg-slate-700 text-white uppercase rounded-lg hover:opacity-95 disabled:opacity-80">
+          <button
+            disabled={loading || uploading}
+            className="p-3 bg-slate-700 text-white uppercase rounded-lg hover:opacity-95 disabled:opacity-80"
+          >
             {loading ? "Creating..." : "Create Listing"}
           </button>
           {error && <p className="text-red-700 text-sm">{error}</p>}
