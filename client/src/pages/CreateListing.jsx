@@ -7,6 +7,12 @@ import {
 } from "firebase/storage";
 import { app } from "../firebase.js";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {
+  signOutStart,
+  signOutFailure,
+  signOutSuccess,
+} from "../redux/user/userSlice.js";
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
@@ -24,12 +30,13 @@ export default function CreateListing() {
     parking: false,
     furnished: false,
   });
-  console.log(formData);
+  // console.log(formData);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
   const { currentUser } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -129,6 +136,8 @@ export default function CreateListing() {
     try {
       if (formData.imageUrls.length < 1)
         return setError("Atleast upload one image !");
+      if (formData.regularPrice < formData.discountPrice)
+        return setError("Discounted price should be less than Regular price.");
       setLoading(true);
       setError(false);
       const res = await fetch(`/api/listing/create`, {
@@ -150,10 +159,36 @@ export default function CreateListing() {
       if (data.success === false) {
         setLoading(false);
         setError(data.message);
+        if (data.message === "Invalid Token!") {
+          const signout = confirm(
+            "SignIn again to continue Creating listings ?"
+          );
+          if (signout) {
+            await handleSignOut();
+          }
+        }
       }
     } catch (error) {
       setError(error.message);
       setLoading(false);
+    }
+  };
+
+  // signout
+  const handleSignOut = async () => {
+    try {
+      dispatch(signOutStart());
+      const res = await fetch("/api/auth/signout", {
+        method: "POST",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signOutFailure(data.message));
+        return;
+      }
+      dispatch(signOutSuccess(data));
+    } catch (error) {
+      dispatch(signOutFailure(error.message));
     }
   };
 
