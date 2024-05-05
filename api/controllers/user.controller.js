@@ -58,3 +58,5 @@ export const DeleteUser = async (req, res) => {
     });
   }
 };
+
+export const getUserListings = async (req, res) => {};
