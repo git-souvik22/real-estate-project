@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
+import Listing from "../models/listing.model.js";
 
 export const UpdateUser = async (req, res) => {
   if (req.user.id !== req.params.id)
@@ -59,4 +60,25 @@ export const DeleteUser = async (req, res) => {
   }
 };
 
-export const getUserListings = async (req, res) => {};
+export const getUserListings = async (req, res) => {
+  if (req.user.id !== req.params.id) {
+    return res.status(500).json({
+      success: false,
+      message: "Session Expired",
+    });
+  }
+  try {
+    const listings = await Listing.find({ userRef: req.params.id });
+    if (listings) {
+      res.status(200).json({
+        success: true,
+        listings,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error,
+    });
+  }
+};
