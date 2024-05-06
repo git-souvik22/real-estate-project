@@ -231,9 +231,7 @@ export default function Profile() {
 
       {userListings && userListings.length > 0 && (
         <div className="flex flex-col gap-4">
-          <h1 className="text-center mt-5 text-2xl font-semibold">
-            Your Listings
-          </h1>
+          <h1 className="text-center mt-5 text-2xl font-bold">Your Listings</h1>
           {userListings.map((listing) => (
             <div
               key={listing._id}
@@ -247,7 +245,7 @@ export default function Profile() {
                 />
               </Link>
               <Link
-                className="text-slate-700 font-semibold flex-1 hover:underline truncate"
+                className="text-slate-700 font-bold flex-1 hover:underline truncate"
                 to={`/listing/${listing._id}`}
               >
                 <p>{listing.name}</p>
