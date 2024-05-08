@@ -46,3 +46,5 @@ export const deleteListing = async (req, res) => {
     });
   }
 };
+
+export const updateListing = async (req, res) => {};
