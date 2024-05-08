@@ -47,4 +47,36 @@ export const deleteListing = async (req, res) => {
   }
 };
 
-export const updateListing = async (req, res) => {};
+export const updateListing = async (req, res) => {
+  const listingExist = await Listing.findById(req.params.id);
+  if (!listingExist) {
+    return res.status(404).json({
+      success: false,
+      message: "No listing found",
+    });
+  }
+  if (req.user.id !== listingExist.userRef) {
+    return res.status(500).json({
+      success: false,
+      message: "You can only update your own published listing",
+    });
+  }
+  try {
+    const updatelisting = await Listing.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+    if (updatelisting) {
+      res.status(201).json({
+        success: true,
+        listing: updatelisting,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      success: true,
+      message: error,
+    });
+  }
+};
