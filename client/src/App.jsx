@@ -7,7 +7,7 @@ import Profile from "./pages/Profile";
 import Header from "./components/Header";
 import Private from "./components/Private";
 import CreateListing from "./pages/CreateListing";
-import { UpdateListing } from "./pages/UpdateListing";
+import UpdateListing from "./pages/UpdateListing";
 
 export default function App() {
   return (
