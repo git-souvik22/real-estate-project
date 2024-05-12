@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getDownloadURL,
   getStorage,
@@ -13,7 +13,7 @@ import {
   signOutFailure,
   signOutSuccess,
 } from "../redux/user/userSlice.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 export default function UpdateListing() {
   const [files, setFiles] = useState([]);
@@ -31,7 +31,14 @@ export default function UpdateListing() {
     parking: false,
     furnished: false,
   });
-  // console.log(formData);
+  const params = useParams();
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      console.log(listingId);
+    };
+    fetchListing();
+  });
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
