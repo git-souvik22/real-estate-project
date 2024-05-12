@@ -85,7 +85,7 @@ export const getLising = async (req, res) => {
   try {
     const ListingData = await Listing.findById(req.params.id);
     if (!ListingData) {
-      res.status(404).json({
+      return res.status(404).json({
         success: false,
         message: "No such listing exists",
       });

@@ -44,7 +44,7 @@ export default function UpdateListing() {
       setFormData(data.listing);
     };
     fetchListing();
-  });
+  }, []);
   const [imageUploadError, setImageUploadError] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState(false);
@@ -155,7 +155,7 @@ export default function UpdateListing() {
         return setError("Discounted price should be less than Regular price.");
       setLoading(true);
       setError(false);
-      const res = await fetch(`/api/listing/create`, {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
