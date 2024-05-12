@@ -80,3 +80,5 @@ export const updateListing = async (req, res) => {
     });
   }
 };
+
+export const getLising = async () => {};
