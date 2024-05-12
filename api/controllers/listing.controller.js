@@ -81,4 +81,23 @@ export const updateListing = async (req, res) => {
   }
 };
 
-export const getLising = async () => {};
+export const getLising = async (req, res) => {
+  try {
+    const ListingData = await Listing.findById(req.params.id);
+    if (!ListingData) {
+      res.status(404).json({
+        success: false,
+        message: "No such listing exists",
+      });
+    }
+    res.status(200).json({
+      success: true,
+      listing: ListingData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong !",
+    });
+  }
+};
