@@ -39,7 +39,7 @@ export default function Listing() {
           Something went wrong!
         </p>
       )}
-      {listing && listing.name}
+      {listing?.name}
     </main>
   );
 }
