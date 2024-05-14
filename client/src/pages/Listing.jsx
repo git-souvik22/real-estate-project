@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 export default function Listing() {
-  const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const params = useParams();
   useEffect(() => {
     const fetchListing = async () => {
       try {
@@ -14,17 +14,15 @@ export default function Listing() {
         const res = await fetch(`/api/listing/get/${params.listingId}`);
         const data = await res.json();
         if (data.success === false) {
-          setError(true);
           setLoading(false);
+          setError(true);
           return;
         }
-        setTimeout(() => {
-          setListing(data.listing);
-          setLoading(false);
-        }, 1500);
-      } catch (error) {
-        setError(true);
         setLoading(false);
+        setListing(data.listing);
+      } catch (error) {
+        setLoading(false);
+        setError(true);
       }
     };
     fetchListing();
@@ -32,14 +30,14 @@ export default function Listing() {
   return (
     <main>
       {loading && (
-        <p className="text-center my-4 font-semibold text-2xl">Loading...</p>
+        <p className="text-center my-4 text-2xl font-semibold">Loading...</p>
       )}
       {error && (
-        <p className="text-center my-4 font-semibold text-red-700 text-2xl">
+        <p className="text-center my-4 text-2xl text-red-700 font-semibold">
           Something went wrong!
         </p>
       )}
-      {listing?.name}
+      {listing && listing.name}
     </main>
   );
 }
